@@ -12,6 +12,7 @@ namespace bfCompiler
         private string _code;
         private int _codePtr;
         private int _memPtr;
+        private string prevNum = "";
         private Stack<int> _lastOpen = new Stack<int>();
         private Action<sbyte> _output;
 
@@ -42,19 +43,41 @@ namespace bfCompiler
             switch (executing)
             {
                 case '+':
-                    _mem[_memPtr]++;
+                    int incAmount = 1;
+                    if (!string.IsNullOrEmpty(prevNum))
+                    {
+                        incAmount = int.Parse(prevNum);
+                    }
+                    _mem[_memPtr] += (sbyte) incAmount;
                     _codePtr++;
+                    prevNum = "";
                     break;
                 case '-':
-                    _mem[_memPtr]--;
+                    int decAmount = 1;
+                    if (!string.IsNullOrEmpty(prevNum))
+                    {
+                        decAmount = int.Parse(prevNum);
+                    }
+                    _mem[_memPtr] -= (sbyte) decAmount;
                     _codePtr++;
+                    prevNum = "";
                     break;
                 case '>':
-                    _memPtr++;
+                    incAmount = 1;
+                    if (!string.IsNullOrEmpty(prevNum))
+                    {
+                        incAmount = int.Parse(prevNum);
+                    }
+                    _memPtr += incAmount;
                     _codePtr++;
                     break;
                 case '<':
-                    _memPtr--;
+                    decAmount = 1;
+                    if (!string.IsNullOrEmpty(prevNum))
+                    {
+                        decAmount = int.Parse(prevNum);
+                    }
+                    _memPtr -= decAmount;
                     _codePtr++;
                     break;
                 case '[':
@@ -79,6 +102,21 @@ namespace bfCompiler
                     break;
                 case ',':
                     _mem[_memPtr] = (sbyte) sbyte.Parse(Console.ReadLine().Trim());
+                    _codePtr++;
+                    break;
+
+                // Optimizations
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    prevNum += executing;
                     _codePtr++;
                     break;
                 default:
