@@ -12,6 +12,7 @@ namespace bfCompiler
         private string _code;
         private int _codePtr;
         private int _memPtr;
+        private string _prevNum = "";
         private Stack<int> _lastOpen = new Stack<int>();
         private Action<sbyte> _output;
 
@@ -42,20 +43,44 @@ namespace bfCompiler
             switch (executing)
             {
                 case '+':
-                    _mem[_memPtr]++;
+                    int incAmount = 1;
+                    if (!string.IsNullOrEmpty(_prevNum))
+                    {
+                        incAmount = int.Parse(_prevNum);
+                    }
+                    _mem[_memPtr] += (sbyte) incAmount;
                     _codePtr++;
+                    _prevNum = "";
                     break;
                 case '-':
-                    _mem[_memPtr]--;
+                    int decAmount = 1;
+                    if (!string.IsNullOrEmpty(_prevNum))
+                    {
+                        decAmount = int.Parse(_prevNum);
+                    }
+                    _mem[_memPtr] -= (sbyte) decAmount;
                     _codePtr++;
+                    _prevNum = "";
                     break;
                 case '>':
-                    _memPtr++;
+                    incAmount = 1;
+                    if (!string.IsNullOrEmpty(_prevNum))
+                    {
+                        incAmount = int.Parse(_prevNum);
+                    }
+                    _memPtr += incAmount;
                     _codePtr++;
+                    _prevNum = "";
                     break;
                 case '<':
-                    _memPtr--;
+                    decAmount = 1;
+                    if (!string.IsNullOrEmpty(_prevNum))
+                    {
+                        decAmount = int.Parse(_prevNum);
+                    }
+                    _memPtr -= decAmount;
                     _codePtr++;
+                    _prevNum = "";
                     break;
                 case '[':
                     StartLoop();
@@ -66,7 +91,7 @@ namespace bfCompiler
                     {
                         _codePtr = _lastOpen.Pop();
                     }
-                    catch (InvalidOperationException e)
+                    catch (InvalidOperationException) 
                     {
                         Console.WriteLine("Error, mismatching [] at " + _codePtr);
                         throw;
@@ -79,6 +104,21 @@ namespace bfCompiler
                     break;
                 case ',':
                     _mem[_memPtr] = (sbyte) sbyte.Parse(Console.ReadLine().Trim());
+                    _codePtr++;
+                    break;
+
+                // Optimizations
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    _prevNum += executing;
                     _codePtr++;
                     break;
                 default:
