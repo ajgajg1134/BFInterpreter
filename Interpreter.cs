@@ -12,7 +12,7 @@ namespace bfCompiler
         private string _code;
         private int _codePtr;
         private int _memPtr;
-        private string prevNum = "";
+        private string _prevNum = "";
         private Stack<int> _lastOpen = new Stack<int>();
         private Action<sbyte> _output;
 
@@ -44,41 +44,43 @@ namespace bfCompiler
             {
                 case '+':
                     int incAmount = 1;
-                    if (!string.IsNullOrEmpty(prevNum))
+                    if (!string.IsNullOrEmpty(_prevNum))
                     {
-                        incAmount = int.Parse(prevNum);
+                        incAmount = int.Parse(_prevNum);
                     }
                     _mem[_memPtr] += (sbyte) incAmount;
                     _codePtr++;
-                    prevNum = "";
+                    _prevNum = "";
                     break;
                 case '-':
                     int decAmount = 1;
-                    if (!string.IsNullOrEmpty(prevNum))
+                    if (!string.IsNullOrEmpty(_prevNum))
                     {
-                        decAmount = int.Parse(prevNum);
+                        decAmount = int.Parse(_prevNum);
                     }
                     _mem[_memPtr] -= (sbyte) decAmount;
                     _codePtr++;
-                    prevNum = "";
+                    _prevNum = "";
                     break;
                 case '>':
                     incAmount = 1;
-                    if (!string.IsNullOrEmpty(prevNum))
+                    if (!string.IsNullOrEmpty(_prevNum))
                     {
-                        incAmount = int.Parse(prevNum);
+                        incAmount = int.Parse(_prevNum);
                     }
                     _memPtr += incAmount;
                     _codePtr++;
+                    _prevNum = "";
                     break;
                 case '<':
                     decAmount = 1;
-                    if (!string.IsNullOrEmpty(prevNum))
+                    if (!string.IsNullOrEmpty(_prevNum))
                     {
-                        decAmount = int.Parse(prevNum);
+                        decAmount = int.Parse(_prevNum);
                     }
                     _memPtr -= decAmount;
                     _codePtr++;
+                    _prevNum = "";
                     break;
                 case '[':
                     StartLoop();
@@ -89,7 +91,7 @@ namespace bfCompiler
                     {
                         _codePtr = _lastOpen.Pop();
                     }
-                    catch (InvalidOperationException e)
+                    catch (InvalidOperationException) 
                     {
                         Console.WriteLine("Error, mismatching [] at " + _codePtr);
                         throw;
@@ -116,7 +118,7 @@ namespace bfCompiler
                 case '7':
                 case '8':
                 case '9':
-                    prevNum += executing;
+                    _prevNum += executing;
                     _codePtr++;
                     break;
                 default:
