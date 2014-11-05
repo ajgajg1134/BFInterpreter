@@ -3,6 +3,45 @@ BFInterpreter
 
 An command line interpreter for the esoteric language BrainF***
 
+<table>
+  <tr>
+    <td>Character</td>
+    <td>Meaning</td>
+  </tr>
+  <tr>
+    <td>&lt;</td>
+    <td>Move the data pointer to the left</td>
+  </tr>
+  <tr>
+    <td>&gt;</td>
+    <td>Move the data pointer to the right</td>
+  </tr>
+  <tr>
+    <td>+</td>
+    <td>Increment the byte at the data pointer</td>
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>Decrement the byte at the data pointer</td>
+  </tr>
+  <tr>
+    <td>[</td>
+    <td>If the byte at the data pointer != 0 jump past the matching ]</td>
+  </tr>
+  <tr>
+    <td>]</td>
+    <td>Jump to matching [</td>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>Output the byte at the data pointer</td>
+  </tr>
+  <tr>
+    <td>,</td>
+    <td>Input a byte and store at the data pointer</td>
+  </tr>
+</table>
+
 Protected by the MIT License
 
 Copyright (c) 2014
