@@ -1,7 +1,7 @@
 BFInterpreter
 =============
 
-An command line interpreter for the esoteric language BrainF***
+An command line interpreter for the esoteric language BrainFuck
 
 <table>
   <tr>
